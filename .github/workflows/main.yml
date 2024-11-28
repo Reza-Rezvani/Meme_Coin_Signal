@@ -1,0 +1,40 @@
+name: Meme Coin Signal Bot
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # هر ساعت اجرا می‌شود
+  workflow_dispatch:   # به شما اجازه می‌دهد که دستی هم اجرا کنید
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest   # استفاده از سیستم‌عامل Ubuntu
+
+    steps:
+      # 1. چک‌اوت کردن کد از مخزن
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      # 2. نصب Python
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      
+      # 3. ساخت محیط مجازی (venv)
+      - name: Create virtual environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate  # فعال کردن محیط مجازی
+
+      # 4. نصب وابستگی‌ها در محیط مجازی
+      - name: Install dependencies
+        run: |
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 5. اجرای اسکریپت اصلی
+      - name: Run meme coin signal bot
+        run: |
+          source venv/bin/activate
+          python memecoin.py
